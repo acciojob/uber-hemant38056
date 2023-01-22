@@ -27,22 +27,23 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public void register(Customer customer) {
 		//Save the customer in database
-		Customer customerEntity = new Customer();
-		int id = customer.getCustomerId();
-		String mobile = customer.getMobile();
-		String password = customer.getPassword();
+//		Customer customerEntity = new Customer();
+//		int id = customer.getCustomerId();
+//		String mobile = customer.getMobile();
+//		String password = customer.getPassword();
+//
+//		customerEntity.setCustomerId(id);
+//		customerEntity.setMobile(mobile);
+//		customerEntity.setPassword(password);
 
-		customerEntity.setCustomerId(id);
-		customerEntity.setMobile(mobile);
-		customerEntity.setPassword(password);
-
-		customerRepository2.save(customerEntity);
+		customerRepository2.save(customer);
 	}
 
 	@Override
 	public void deleteCustomer(Integer customerId) {
 		// Delete customer without using deleteById function
-		customerRepository2.deleteById(customerId);
+		Customer customer = customerRepository2.findById(customerId).get();
+		customerRepository2.delete(customer);
 
 	}
 
