@@ -29,16 +29,16 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public void adminRegister(Admin admin) {
 		//Save the admin in the database
-		Admin adminEntity = new Admin();
-		int adminId = admin.getAdminId();
-		String username = admin.getUsername();
-		String password = admin.getPassword();
+//		Admin adminEntity = new Admin();
+//		int adminId = admin.getAdminId();
+//		String username = admin.getUsername();
+//		String password = admin.getPassword();
+//
+//		adminEntity.setAdminId(adminId);
+//		adminEntity.setUsername(username);
+//		adminEntity.setPassword(password);
 
-		adminEntity.setAdminId(adminId);
-		adminEntity.setUsername(username);
-		adminEntity.setPassword(password);
-
-		adminRepository1.save(adminEntity);
+		adminRepository1.save(admin);
 	}
 
 	@Override
