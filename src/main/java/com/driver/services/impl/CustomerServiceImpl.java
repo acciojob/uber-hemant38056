@@ -58,45 +58,84 @@ public class CustomerServiceImpl implements CustomerService {
 		//Book the driver with lowest driverId who is free (cab available variable is Boolean.TRUE). If no driver is available, throw "No cab available!" exception
 		//Avoid using SQL query
 
-		int freeDriverId = 0;
-		List<Driver> driverList = driverRepository2.findAll();
-		for(Driver driver : driverList){
-			Cab cab = driver.getCab();
-			if(cab.getAvailable() == true){
-				freeDriverId = driver.getDriverId();
-				break;
+//		int freeDriverId = 0;
+//		List<Driver> driverList = driverRepository2.findAll();
+//		for(Driver driver : driverList){
+//			Cab cab = driver.getCab();
+//			if(cab.getAvailable() == true){
+//				freeDriverId = driver.getDriverId();
+//				break;
+//			}
+//		}
+//		if(freeDriverId == 0){
+//			throw new Exception("No cab available!");
+//		}
+//
+//			TripBooking tripBooking = new TripBooking();
+//			tripBooking.setFromLocation(fromLocation);
+//			tripBooking.setToLocation(toLocation);
+//			tripBooking.setDistanceInKm(distanceInKm);
+//
+//			tripBookingRepository2.save(tripBooking);
+//
+//			Customer customer = customerRepository2.findById(customerId).get();
+//			customer.getTripBookingList().add(tripBooking);
+//
+//			customerRepository2.save(customer);
+//
+//			Driver driver = driverRepository2.findById(freeDriverId).get();
+//			driver.getTripBookingList().add(tripBooking);
+//			Cab cab = driver.getCab();
+//			cab.setAvailable(false);
+//
+//			tripBooking.setStatus(TripStatus.CONFIRMED);
+//
+//			driverRepository2.save(driver);
+//
+//
+//
+//			return tripBooking;
+
+
+		TripBooking tripBooking = new TripBooking();
+		Driver driver = null;
+
+		List<Driver> allDrivers = driverRepository2.findAll();
+
+		for(Driver driver1 : allDrivers){
+			if(driver1.getCab().getAvailable() == true){
+				if((driver == null) || (driver.getDriverId() > driver1.getDriverId())){
+					driver = driver1;
+				}
 			}
 		}
-		if(freeDriverId == 0){
+
+		if(driver == null){
 			throw new Exception("No cab available!");
 		}
 
-			TripBooking tripBooking = new TripBooking();
-			tripBooking.setFromLocation(fromLocation);
-			tripBooking.setToLocation(toLocation);
-			tripBooking.setDistanceInKm(distanceInKm);
+		Customer customer = customerRepository2.findById(customerId).get();
+		tripBooking.setCustomer(customer);
+		tripBooking.setDriver(driver);
+		driver.getCab().setAvailable(Boolean.FALSE);
+		tripBooking.setFromLocation(fromLocation);
+		tripBooking.setToLocation(toLocation);
+		tripBooking.setDistanceInKm(distanceInKm);
 
-			tripBookingRepository2.save(tripBooking);
+		int ratePerKm = driver.getCab().getPerKmRate();
 
-			Customer customer = customerRepository2.findById(customerId).get();
-			customer.getTripBookingList().add(tripBooking);
+		tripBooking.setBill(distanceInKm*10);
 
-			customerRepository2.save(customer);
+		tripBooking.setStatus(TripStatus.CONFIRMED);
 
-			Driver driver = driverRepository2.findById(freeDriverId).get();
-			driver.getTripBookingList().add(tripBooking);
-			Cab cab = driver.getCab();
-			cab.setAvailable(false);
+		customer.getTripBookingList().add(tripBooking);
+		customerRepository2.save(customer);
 
-			tripBooking.setStatus(TripStatus.CONFIRMED);
-
-			driverRepository2.save(driver);
-
+		driver.getTripBookingList().add(tripBooking);
+		driverRepository2.save(driver);
 
 
-			return tripBooking;
-
-
+		return tripBooking;
 
 	}
 
