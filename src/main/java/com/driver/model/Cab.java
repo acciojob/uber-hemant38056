@@ -4,6 +4,7 @@ package com.driver.model;
 import javax.persistence.*;
 
 @Entity
+@Table
 public class Cab {
 
     @Id

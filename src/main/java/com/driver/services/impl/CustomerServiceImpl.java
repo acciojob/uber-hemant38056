@@ -70,7 +70,7 @@ public class CustomerServiceImpl implements CustomerService {
 		if(freeDriverId == 0){
 			throw new Exception("No cab available!");
 		}
-		else{
+
 			TripBooking tripBooking = new TripBooking();
 			tripBooking.setFromLocation(fromLocation);
 			tripBooking.setToLocation(toLocation);
@@ -95,7 +95,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 
 			return tripBooking;
-		}
+
 
 
 	}
@@ -106,6 +106,7 @@ public class CustomerServiceImpl implements CustomerService {
 		TripBooking tripBooking = tripBookingRepository2.findById(tripId).get();
 		tripBooking.setStatus(TripStatus.CANCELED);
 		tripBooking.setBill(0);
+		tripBooking.getDriver().getCab().setAvailable(true);
 		tripBookingRepository2.save(tripBooking);
 
 	}
@@ -122,6 +123,8 @@ public class CustomerServiceImpl implements CustomerService {
 		int price = cab.getPerKmRate();
 
 		tripBooking.setBill(totalDistance * price);
+
+		tripBooking.getDriver().getCab().setAvailable(true);
 
 		tripBookingRepository2.save(tripBooking);
 	}
